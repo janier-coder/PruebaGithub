@@ -97,7 +97,7 @@ print("_" * 30)'''
 
 # Un grupo de amigos termina de comer. El programa pide el valor de la cuenta, el porcentaje de propina y el número de personas. Calcula la propina, el total con propina y cuánto debe pagar cada uno.
 
-Valor_cuenta = float(input("Ingrese el valor de la cuenta: "))
+'''Valor_cuenta = float(input("Ingrese el valor de la cuenta: "))
 propina = Valor_cuenta * 0.10 
 personas = int(input("Ingrese el número de personas que van a pagar la cuenta: "))
 
@@ -106,4 +106,103 @@ pago_por_persona = total_con_propina / personas
 
 print(f"La propina es: {propina}")
 print(f"El total con propina es: {total_con_propina}")
-print(f"El pago por persona es: {pago_por_persona}")
+print(f"El pago por persona es: {pago_por_persona}")'''
+
+# El programa pide al usuario que ingrese un número y luego muestra si es menor que 10, utilizando un bucle while para incrementar el número hasta que sea mayor o igual a 10.
+
+"""Numero = int(input("Ingrese un número: "))
+
+while Numero <10:
+    print(f"El número {Numero} es menor que 10")
+    Numero = Numero + 1
+else:
+    print(f"El número {Numero} es mayor o igual a 10 fin del programa")"""
+
+# El programa muestra los números del 1 al 10 utilizando un bucle while.
+
+"""numero = 1
+
+while numero <= 10:
+    print(f"el numero {numero}")
+    numero = numero + 1"""
+
+# El programa muestra los números del 10 al 1 utilizando un bucle while.
+
+"""numero = 10 
+
+while numero >= 1:
+    print(f"el numero es {numero}")
+    numero = numero - 1"""
+
+# El programa muestra los números pares del 2 al 20 utilizando un bucle while.
+
+"""numeros_pares = 2
+
+while numeros_pares <= 20:
+    print(f"el numero {numeros_pares} es par")
+    numeros_pares = numeros_pares + 2"""
+
+#
+
+"""numeros_impares = 1
+
+while numeros_impares <= 19:
+    print(f"el numero {numeros_impares} es impar")
+    numeros_impares = numeros_impares + 2"""
+
+#pida al usuario que ingrese un número y luego muestre todos los números desde ese número hasta 5 utilizando un bucle while.
+
+"""numero = int(input("Ingrese un número: "))
+
+while numero <=5:
+    print(f"El número es {numero}")
+    numero = numero + 1"""
+
+#Escriba un algoritmo que pida un número al usuario y lo muestre 5 veces en pantalla.
+
+"""numero = int(input("Ingrese un número: "))
+i = 1
+while i <= 5:
+    print(f"El número es {numero}")
+    i = i + 1"""
+
+
+#escriba un algortimo que muestre las tablas de multiplicar
+
+"""tabla = int(input("Ingrese la tabla de multiplicar que desea ver: "))
+i = 1
+
+while i <= 10:
+    resultado = tabla * i
+    print(f"{tabla} x {i} = {resultado}")
+    i = i + 1"""
+
+#escriba un algoritmo que pida un número al usuario y muestre todos los números desde 1 hasta ese número.
+
+"""numero = int(input("Ingrese un número: "))
+
+x = 1
+
+while x <= numero:
+    print("el numero es " + str(x))
+    x = x + 1"""
+
+# pide un numero aleatorio a un usuario y que adivine cual es el numero
+
+"""import random
+
+numero_secreto = random.randint(1, 10)
+print(f"el numero secreto es {numero_secreto}")
+
+intentos = 3
+
+numero_usuario = int(input("Adivina el número secreto entre 1 y 10: "))
+
+while numero_usuario != numero_secreto:
+    numero_usuario = int(input("Intenta de nuevo: "))
+    intentos = intentos - 1
+
+def print(arg1):
+    ...
+
+przint("¡Felicidades! Adivinaste el número secreto.")"""
