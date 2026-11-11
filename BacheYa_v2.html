@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BacheYa</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0a0f0a;--surface:#111811;--surface2:#182018;--border:#2a3a2a;--accent:#7cfc00;--accent2:#4ade80;--accent-dim:#3a6e1a;--danger:#ff4d4d;--warning:#ffb347;--text:#e8f5e8;--text-dim:#7a9a7a;--r:16px;--rs:10px}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:hidden}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',-apple-system,sans-serif;display:flex;flex-direction:column}
+nav{background:var(--surface);border-top:1px solid var(--border);display:flex;justify-content:space-around;align-items:center;padding:10px 0;flex-shrink:0}
+.nb{display:flex;flex-direction:column;align-items:center;gap:3px;background:none;border:none;color:var(--text-dim);cursor:pointer;font-size:0.65rem;padding:6px 12px;border-radius:var(--rs);transition:color .2s}
+.nb svg{width:20px;height:20px}
+.nb.active{color:var(--accent)}
+header{background:var(--bg);border-bottom:1px solid var(--border);padding:12px 16px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.logo{font-family:'Syne',sans-serif;font-weight:800;font-size:1.3rem;color:var(--accent);letter-spacing:-1px}
+.logo span{color:var(--text-dim)}
+.badge{background:var(--accent-dim);color:var(--accent);font-size:0.6rem;font-weight:700;padding:3px 10px;border-radius:20px;text-transform:uppercase}
+#app{flex:1;overflow-y:auto;overflow-x:hidden}
+#app::-webkit-scrollbar{width:3px}
+#app::-webkit-scrollbar-thumb{background:var(--border)}
+.page{display:none;padding:14px 16px 20px;max-width:500px;margin:0 auto;animation:fu .3s ease}
+.page.active{display:block}
+@keyframes fu{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.pt{font-family:'Syne',sans-serif;font-weight:800;font-size:1.4rem;margin-bottom:3px}
+.ps{color:var(--text-dim);font-size:0.82rem;margin-bottom:16px}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:16px;margin-bottom:12px;transition:border-color .2s}
+.card:hover{border-color:var(--accent-dim)}
+.sr{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
+.sc{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:14px;text-align:center}
+.sn{font-family:'Syne',sans-serif;font-weight:800;font-size:1.8rem;color:var(--accent);line-height:1}
+.sl{font-size:0.68rem;color:var(--text-dim);margin-top:3px;text-transform:uppercase;letter-spacing:.08em}
+.map-wrap{background:var(--surface2);border:1px solid var(--border);border-radius:var(--r);height:220px;margin-bottom:16px;position:relative;overflow:hidden}
+.mg{position:absolute;inset:0;background-image:linear-gradient(var(--border) 1px,transparent 1px),linear-gradient(90deg,var(--border) 1px,transparent 1px);background-size:28px 28px}
+.mr{position:absolute;background:#1e2e1e}
+.mp{position:absolute;display:flex;flex-direction:column;align-items:center;cursor:pointer;transform:translate(-50%,-100%);animation:pp 2s ease infinite}
+.mp svg{width:26px;height:26px;filter:drop-shadow(0 3px 6px rgba(124,252,0,.35))}
+.mp .pl{background:var(--surface);border:1px solid var(--border);border-radius:4px;font-size:0.58rem;padding:2px 5px;white-space:nowrap;margin-top:1px;color:var(--text-dim)}
+@keyframes pp{0%,100%{transform:translate(-50%,-100%) scale(1)}50%{transform:translate(-50%,-100%) scale(1.1)}}
+.ml{position:absolute;top:10px;left:10px;background:rgba(10,15,10,.85);border:1px solid var(--border);border-radius:8px;padding:5px 10px;font-size:0.68rem;color:var(--text-dim)}
+.mcb{position:absolute;bottom:10px;right:10px;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:6px 12px;font-size:0.72rem;color:var(--text-dim);cursor:pointer}
+.mcb:hover{color:var(--accent)}
+.bi{display:flex;gap:12px;align-items:flex-start}
+.bic{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.bic.alta{background:rgba(255,77,77,.15)}.bic.media{background:rgba(255,179,71,.15)}.bic.baja{background:rgba(74,222,128,.15)}
+.bif{flex:1}
+.bt{font-weight:500;font-size:0.9rem}
+.bm{font-size:0.72rem;color:var(--text-dim);margin-top:2px}
+.ba{display:flex;gap:5px;margin-top:7px;flex-wrap:wrap}
+.bs{font-size:0.62rem;padding:3px 9px;border-radius:20px;font-weight:700;text-transform:uppercase}
+.bs.pendiente{background:rgba(255,77,77,.15);color:var(--danger)}
+.bs.proceso{background:rgba(255,179,71,.15);color:var(--warning)}
+.bs.resuelto{background:rgba(74,222,128,.15);color:var(--accent2)}
+.bp{font-size:0.62rem;padding:3px 9px;border-radius:20px;font-weight:700;text-transform:uppercase}
+.bp.alta{background:rgba(255,77,77,.1);color:var(--danger)}
+.bp.media{background:rgba(255,179,71,.1);color:var(--warning)}
+.bp.baja{background:rgba(74,222,128,.1);color:var(--accent2)}
+.ub{background:var(--surface2);border:1px solid var(--border);border-radius:7px;padding:3px 9px;font-size:0.7rem;color:var(--text-dim);cursor:pointer;display:flex;align-items:center;gap:3px;transition:all .2s}
+.ub:hover,.ub.active{background:rgba(124,252,0,.1);border-color:var(--accent-dim);color:var(--accent)}
+.fg{margin-bottom:14px}
+label{display:block;font-size:0.72rem;color:var(--text-dim);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px}
+input,select,textarea{width:100%;background:var(--surface);border:1px solid var(--border);border-radius:var(--rs);color:var(--text);padding:11px 13px;font-family:inherit;font-size:0.88rem;transition:border-color .2s;outline:none}
+input:focus,select:focus,textarea:focus{border-color:var(--accent-dim);box-shadow:0 0 0 3px rgba(124,252,0,.07)}
+select option{background:var(--surface)}
+textarea{resize:vertical;min-height:80px}
+.pd{border:2px dashed var(--border);border-radius:var(--r);padding:28px;text-align:center;cursor:pointer;transition:all .2s;margin-bottom:14px}
+.pd:hover{border-color:var(--accent-dim);background:rgba(124,252,0,.02)}
+.pd .di{font-size:2.2rem;margin-bottom:6px}
+.pd p{color:var(--text-dim);font-size:0.82rem}
+.pd span{color:var(--accent)}
+#pg{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px}
+.pt2{border-radius:var(--rs);overflow:hidden;position:relative;aspect-ratio:1}
+.pt2 img{width:100%;height:100%;object-fit:cover}
+.pt2 .rp{position:absolute;top:4px;right:4px;background:rgba(0,0,0,.7);border:none;border-radius:50%;width:20px;height:20px;color:#fff;cursor:pointer;font-size:0.75rem;display:flex;align-items:center;justify-content:center}
+.gp{background:var(--surface);border:1px solid var(--border);border-radius:40px;padding:9px 14px;display:flex;align-items:center;gap:9px;font-size:0.82rem;cursor:pointer;transition:all .2s}
+.gp:hover{border-color:var(--accent-dim)}
+.gd{width:7px;height:7px;border-radius:50%;background:var(--accent);animation:gb 1.5s ease infinite;flex-shrink:0}
+@keyframes gb{0%,100%{opacity:1}50%{opacity:.3}}
+.gc{color:var(--accent2);font-size:0.75rem;font-family:monospace}
+.btn{width:100%;background:var(--accent);color:#0a0f0a;border:none;border-radius:var(--rs);padding:13px;font-family:'Syne',sans-serif;font-weight:800;font-size:0.9rem;cursor:pointer;text-transform:uppercase;letter-spacing:.05em;transition:all .2s}
+.btn:hover{background:#a0ff40;transform:translateY(-1px)}
+.btn:active{transform:translateY(0)}
+#toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(16px);background:var(--accent);color:#0a0f0a;padding:10px 22px;border-radius:40px;font-weight:700;font-size:0.84rem;opacity:0;pointer-events:none;transition:all .3s;z-index:9000;white-space:nowrap}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+#sov{display:none;position:fixed;inset:0;background:rgba(10,15,10,.96);z-index:8000;align-items:center;justify-content:center;flex-direction:column;text-align:center;padding:20px}
+#sov.show{display:flex;animation:fu .4s ease}
+#splash{position:fixed;inset:0;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999;transition:opacity .5s ease}
+#splash .logo-big{font-family:'Syne',sans-serif;font-size:3.5rem;font-weight:800;color:var(--accent);letter-spacing:-2px}
+#splash .logo-big span{color:var(--text-dim)}
+#splash p{color:var(--text-dim);margin-top:6px;font-size:0.85rem;letter-spacing:.12em;text-transform:uppercase}
+.sdots{display:flex;gap:8px;margin-top:36px}
+.sdots span{width:8px;height:8px;border-radius:50%;background:var(--accent);animation:dot 1.2s ease-in-out infinite}
+.sdots span:nth-child(2){animation-delay:.2s}
+.sdots span:nth-child(3){animation-delay:.4s}
+@keyframes dot{0%,80%,100%{opacity:.2;transform:scale(.8)}40%{opacity:1;transform:scale(1.2)}}
+#sov .ck{font-size:4rem;margin-bottom:14px}
+#sov h2{font-weight:800;font-size:1.6rem;color:var(--accent)}
+#sov p{color:var(--text-dim);margin-top:8px;max-width:260px;font-size:.9rem}
+.div{height:1px;background:var(--border);margin:16px 0}
+.sl2{font-size:0.68rem;color:var(--text-dim);text-transform:uppercase;letter-spacing:.12em;margin-bottom:10px;font-weight:700}
+.av{width:60px;height:60px;border-radius:50%;background:linear-gradient(135deg,var(--accent-dim),#0a2010);border:2px solid var(--accent);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:1.4rem;color:var(--accent);flex-shrink:0}
+.ph{display:flex;gap:14px;align-items:center;margin-bottom:16px}
+.lb{height:4px;background:var(--surface2);border-radius:4px;margin-top:5px;overflow:hidden}
+.lf{height:100%;background:linear-gradient(90deg,var(--accent2),var(--accent));border-radius:4px}
+.cbr{display:flex;align-items:center;gap:8px;margin-bottom:9px}
+.cbl{font-size:0.75rem;color:var(--text-dim);width:65px;flex-shrink:0;text-align:right}
+.cbt{flex:1;height:9px;background:var(--surface2);border-radius:20px;overflow:hidden}
+.cbf{height:100%;border-radius:20px;background:var(--accent);transition:width 1s ease}
+.cbv{font-size:0.75rem;color:var(--text-dim);width:26px}
+.fr{display:flex;gap:7px;overflow-x:auto;padding-bottom:4px;margin-bottom:14px}
+.fr::-webkit-scrollbar{display:none}
+.fc{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:5px 13px;font-size:0.75rem;cursor:pointer;white-space:nowrap;transition:all .2s;flex-shrink:0}
+.fc.active{background:rgba(124,252,0,.12);border-color:var(--accent-dim);color:var(--accent)}
+</style>
+</head>
+<body>
+<div id="toast"></div>
+<div id="splash">
+  <div class="logo-big">Bache<span>Ya</span></div>
+  <p>Ibagué · Reporte Ciudadano</p>
+  <div class="sdots"><span></span><span></span><span></span></div>
+</div>
+<div id="sov">
+  <div class="ck">🎉</div>
+  <h2>¡Reporte enviado!</h2>
+  <p>Registrado y geolocaizado. Las autoridades serán notificadas.</p>
+  <br>
+  <button class="btn" style="width:180px;margin-top:8px" onclick="closeSuccess()">Ver mis reportes</button>
+</div>
+<header>
+  <div class="logo">Bache<span>Ya</span></div>
+  <div class="badge">Ibagué</div>
+</header>
+<div id="app">
+
+<!-- MAPA -->
+<div class="page active" id="page-mapa">
+  <div class="pt">Mapa de Baches</div>
+  <div class="ps">Baches reportados en tiempo real</div>
+  <div class="map-wrap">
+    <div class="mg"></div>
+    <div class="mr" style="top:40%;left:0;right:0;height:18px;opacity:.7"></div>
+    <div class="mr" style="top:68%;left:0;right:0;height:13px;opacity:.5"></div>
+    <div class="mr" style="left:30%;top:0;bottom:0;width:15px;opacity:.6"></div>
+    <div class="mr" style="left:65%;top:0;bottom:0;width:11px;opacity:.5"></div>
+    <div class="mp" style="left:35%;top:42%" onclick="showToast('Cra 5 #14-22 · Alta prioridad')">
+      <svg viewBox="0 0 24 24" fill="#ff4d4d"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+      <div class="pl">Cra 5 · Alta</div>
+    </div>
+    <div class="mp" style="left:68%;top:44%" onclick="showToast('Av. Ambalá #23-10 · Media')">
+      <svg viewBox="0 0 24 24" fill="#ffb347"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+      <div class="pl">Ambalá · Media</div>
+    </div>
+    <div class="mp" style="left:50%;top:70%" onclick="showToast('Cll 42 #3-15 · Baja')">
+      <svg viewBox="0 0 24 24" fill="#7cfc00"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+      <div class="pl">Cll 42 · Baja</div>
+    </div>
+    <div class="mp" style="left:20%;top:56%" onclick="showToast('Barrio El Salado · Alta')">
+      <svg viewBox="0 0 24 24" fill="#ff4d4d"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+      <div class="pl">El Salado · Alta</div>
+    </div>
+    <div class="ml">📍 Ibagué, Tolima</div>
+    <button class="mcb" onclick="showToast('Centrando en tu ubicación...')">📡 Mi ubicación</button>
+  </div>
+  <div style="display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap">
+    <div style="display:flex;align-items:center;gap:5px;font-size:0.77rem"><span style="color:#ff4d4d">●</span> Alta</div>
+    <div style="display:flex;align-items:center;gap:5px;font-size:0.77rem"><span style="color:#ffb347">●</span> Media</div>
+    <div style="display:flex;align-items:center;gap:5px;font-size:0.77rem"><span style="color:#7cfc00">●</span> Baja</div>
+  </div>
+  <div class="sr">
+    <div class="sc"><div class="sn" id="stat-total">47</div><div class="sl">Total Baches</div></div>
+    <div class="sc"><div class="sn" id="stat-res">12</div><div class="sl">Resueltos</div></div>
+  </div>
+  <div class="sl2">Reportes recientes</div>
+  <div class="card">
+    <div class="bi">
+      <div class="bic alta"><svg width="18" height="18" viewBox="0 0 24 24" fill="#ff4d4d"><path d="M1 21L12 2 23 21H1zm11-3h2v-2h-2v2zm0-4h2v-4h-2v4z"/></svg></div>
+      <div class="bif">
+        <div class="bt">Cra 5 con Calle 14</div>
+        <div class="bm">📍 Centro · hace 2h · 8 reportes</div>
+        <div class="ba"><span class="bs pendiente">Pendiente</span><span class="bp alta">Alta</span><button class="ub" onclick="upvote(this)">👍 <span>14</span></button></div>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="bi">
+      <div class="bic media"><svg width="18" height="18" viewBox="0 0 24 24" fill="#ffb347"><path d="M1 21L12 2 23 21H1zm11-3h2v-2h-2v2zm0-4h2v-4h-2v4z"/></svg></div>
+      <div class="bif">
+        <div class="bt">Av. Ambalá #23-10</div>
+        <div class="bm">📍 Ambalá · hace 5h · 3 reportes</div>
+        <div class="ba"><span class="bs proceso">En proceso</span><span class="bp media">Media</span><button class="ub" onclick="upvote(this)">👍 <span>6</span></button></div>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="bi">
+      <div class="bic baja"><svg width="18" height="18" viewBox="0 0 24 24" fill="#7cfc00"><path d="M1 21L12 2 23 21H1zm11-3h2v-2h-2v2zm0-4h2v-4h-2v4z"/></svg></div>
+      <div class="bif">
+        <div class="bt">Calle 42 #3-15</div>
+        <div class="bm">📍 Belén · ayer · 1 reporte</div>
+        <div class="ba"><span class="bs resuelto">Resuelto</span><span class="bp baja">Baja</span><button class="ub" onclick="upvote(this)">👍 <span>2</span></button></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- REPORTAR -->
+<div class="page" id="page-reportar">
+  <div class="pt">Nuevo Reporte</div>
+  <div class="ps">Reporta un bache con foto y GPS</div>
+  <div class="fg">
+    <label>📍 Ubicación GPS</label>
+    <div class="gp" onclick="getGPS()">
+      <div class="gd"></div>
+      <span id="gps-text">Obtener mi ubicación actual</span>
+      <span class="gc" id="gps-coords"></span>
+    </div>
+  </div>
+  <div class="fg"><label>Dirección (opcional)</label><input type="text" id="direccion" placeholder="Ej: Cra 5 con Calle 14"></div>
+  <div class="fg">
+    <label>Zona / Barrio</label>
+    <select id="zona">
+      <option value="">Seleccionar zona...</option>
+      <option>Centro</option><option>El Salado</option><option>Ambalá</option>
+      <option>Belén</option><option>Los Andes</option><option>La Pola</option>
+      <option>Jordán</option><option>Santa Bárbara</option><option>Calambeo</option><option>Otro</option>
+    </select>
+  </div>
+  <div class="fg">
+    <label>Nivel de daño</label>
+    <select id="nivel">
+      <option value="">Seleccionar nivel...</option>
+      <option value="alta">🔴 Alto — Peligroso</option>
+      <option value="media">🟡 Medio — Daño moderado</option>
+      <option value="baja">🟢 Bajo — Pequeño deterioro</option>
+    </select>
+  </div>
+  <div class="fg"><label>Descripción</label><textarea id="descripcion" placeholder="Tamaño, riesgos, si causó accidentes..."></textarea></div>
+  <div class="fg">
+    <label>Fotografías</label>
+    <div class="pd" onclick="document.getElementById('photo-input').click()">
+      <div class="di">📷</div>
+      <p>Toca para <span>agregar fotos</span></p>
+      <p style="font-size:.72rem;margin-top:3px">Máx. 4 imágenes</p>
+    </div>
+    <input type="file" id="photo-input" accept="image/*" multiple style="display:none" onchange="handlePhotos(this)">
+    <div id="pg"></div>
+  </div>
+  <div class="fg">
+    <label>Tipo de vía</label>
+    <select id="tipo-via">
+      <option value="">Seleccionar...</option>
+      <option>Carrera principal</option><option>Calle secundaria</option>
+      <option>Avenida</option><option>Vía barrial</option>
+    </select>
+  </div>
+  <button class="btn" onclick="submitReport()">📤 Enviar Reporte</button>
+</div>
+
+<!-- MIS REPORTES -->
+<div class="page" id="page-mis">
+  <div class="pt">Mis Reportes</div>
+  <div class="ps">Seguimiento de tus reportes</div>
+  <div class="fr">
+    <div class="fc active" onclick="filterR(this,'todos')">Todos</div>
+    <div class="fc" onclick="filterR(this,'pendiente')">Pendientes</div>
+    <div class="fc" onclick="filterR(this,'proceso')">En proceso</div>
+    <div class="fc" onclick="filterR(this,'resuelto')">Resueltos</div>
+  </div>
+  <div class="sr">
+    <div class="sc"><div class="sn" id="mis-total">3</div><div class="sl">Mis reportes</div></div>
+    <div class="sc"><div class="sn" style="color:var(--accent2)" id="mis-res">1</div><div class="sl">Resueltos</div></div>
+  </div>
+  <div id="mis-list">
+    <div class="card report-item" data-estado="pendiente">
+      <div class="bi">
+        <div class="bic alta"><svg width="18" height="18" viewBox="0 0 24 24" fill="#ff4d4d"><path d="M1 21L12 2 23 21H1zm11-3h2v-2h-2v2zm0-4h2v-4h-2v4z"/></svg></div>
+        <div class="bif">
+          <div class="bt">Cra 5 con Calle 14</div>
+          <div class="bm">📅 14 Mar 2026 · Centro</div>
+          <div class="ba"><span class="bs pendiente">Pendiente</span></div>
+          <div style="margin-top:7px;font-size:.76rem;color:var(--text-dim)">Gran hoyo ~60cm. Riesgo alto de accidente.</div>
+        </div>
+      </div>
+    </div>
+    <div class="card report-item" data-estado="proceso">
+      <div class="bi">
+        <div class="bic media"><svg width="18" height="18" viewBox="0 0 24 24" fill="#ffb347"><path d="M1 21L12 2 23 21H1zm11-3h2v-2h-2v2zm0-4h2v-4h-2v4z"/></svg></div>
+        <div class="bif">
+          <div class="bt">Av. Ambalá #23-10</div>
+          <div class="bm">📅 10 Mar 2026 · Ambalá</div>
+          <div class="ba"><span class="bs proceso">En proceso</span></div>
+          <div style="margin-top:7px;font-size:.76rem;color:var(--text-dim)">Alcaldía confirmó revisión esta semana.</div>
+        </div>
+      </div>
+    </div>
+    <div class="card report-item" data-estado="resuelto">
+      <div class="bi">
+        <div class="bic baja"><svg width="18" height="18" viewBox="0 0 24 24" fill="#7cfc00"><path d="M1 21L12 2 23 21H1zm11-3h2v-2h-2v2zm0-4h2v-4h-2v4z"/></svg></div>
+        <div class="bif">
+          <div class="bt">Calle 42 #3-15</div>
+          <div class="bm">📅 2 Mar 2026 · Belén</div>
+          <div class="ba"><span class="bs resuelto">✓ Resuelto en 8 días</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- STATS -->
+<div class="page" id="page-stats">
+  <div class="pt">Estadísticas</div>
+  <div class="ps">Impacto del reporte ciudadano</div>
+  <div class="sr">
+    <div class="sc"><div class="sn">47</div><div class="sl">Total reportes</div></div>
+    <div class="sc"><div class="sn">312</div><div class="sl">Ciudadanos activos</div></div>
+  </div>
+  <div class="sr">
+    <div class="sc"><div class="sn" style="color:var(--warning)">8.5</div><div class="sl">Días prom. reparación</div></div>
+    <div class="sc"><div class="sn" style="color:var(--accent2)">76%</div><div class="sl">Satisfacción ciudadana</div></div>
+  </div>
+  <div class="div"></div>
+  <div style="font-weight:700;font-size:1rem;margin-bottom:12px">Baches por zona</div>
+  <div class="cbr"><div class="cbl">Centro</div><div class="cbt"><div class="cbf" style="width:85%"></div></div><div class="cbv">18</div></div>
+  <div class="cbr"><div class="cbl">Ambalá</div><div class="cbt"><div class="cbf" style="width:48%"></div></div><div class="cbv">10</div></div>
+  <div class="cbr"><div class="cbl">El Salado</div><div class="cbt"><div class="cbf" style="width:38%"></div></div><div class="cbv">8</div></div>
+  <div class="cbr"><div class="cbl">Belén</div><div class="cbt"><div class="cbf" style="width:24%"></div></div><div class="cbv">5</div></div>
+  <div class="cbr"><div class="cbl">Otros</div><div class="cbt"><div class="cbf" style="width:28%"></div></div><div class="cbv">6</div></div>
+  <div class="div"></div>
+  <div style="font-weight:700;font-size:1rem;margin-bottom:12px">Estado de reportes</div>
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:16px">
+    <div class="sc"><div style="font-size:1.5rem;font-weight:800;color:#ff4d4d">24</div><div class="sl">Pendientes</div></div>
+    <div class="sc"><div style="font-size:1.5rem;font-weight:800;color:#ffb347">11</div><div class="sl">En proceso</div></div>
+    <div class="sc"><div style="font-size:1.5rem;font-weight:800;color:#7cfc00">12</div><div class="sl">Resueltos</div></div>
+  </div>
+  <div class="div"></div>
+  <div style="font-weight:700;font-size:1rem;margin-bottom:12px">Nivel de daño</div>
+  <div class="cbr"><div class="cbl">Alta</div><div class="cbt"><div class="cbf" style="width:60%;background:#ff4d4d"></div></div><div class="cbv">28</div></div>
+  <div class="cbr"><div class="cbl">Media</div><div class="cbt"><div class="cbf" style="width:38%;background:#ffb347"></div></div><div class="cbv">12</div></div>
+  <div class="cbr"><div class="cbl">Baja</div><div class="cbt"><div class="cbf" style="width:17%"></div></div><div class="cbv">7</div></div>
+</div>
+
+<!-- PERFIL -->
+<div class="page" id="page-perfil">
+  <div class="pt">Mi Perfil</div>
+  <div class="ps">Ciudadano activo de Ibagué</div>
+  <div class="ph">
+    <div class="av">JA</div>
+    <div>
+      <div style="font-weight:800;font-size:1.05rem">Janier Agualimpia</div>
+      <div style="font-size:0.78rem;color:var(--text-dim)">janier@email.com</div>
+      <div style="font-size:0.72rem;color:var(--accent);margin-top:3px">🏆 Nivel 3 — Reportero Activo</div>
+      <div class="lb"><div class="lf" style="width:65%"></div></div>
+    </div>
+  </div>
+  <div class="sr">
+    <div class="sc"><div class="sn">3</div><div class="sl">Mis reportes</div></div>
+    <div class="sc"><div class="sn" style="color:var(--warning)">150</div><div class="sl">Puntos</div></div>
+  </div>
+  <div class="div"></div>
+  <div class="sl2">Logros</div>
+  <div class="card" style="display:flex;gap:11px;align-items:center"><div style="font-size:1.8rem">🥇</div><div><div style="font-weight:600">Primer Reporte</div><div style="font-size:0.75rem;color:var(--text-dim)">Enviaste tu primer reporte ciudadano</div></div></div>
+  <div class="card" style="display:flex;gap:11px;align-items:center"><div style="font-size:1.8rem">📍</div><div><div style="font-weight:600">Explorador Urbano</div><div style="font-size:0.75rem;color:var(--text-dim)">Reportaste en 3 zonas diferentes</div></div></div>
+  <div class="card" style="opacity:.4;display:flex;gap:11px;align-items:center"><div style="font-size:1.8rem">🔟</div><div><div style="font-weight:600">Reportero Activo</div><div style="font-size:0.75rem;color:var(--text-dim)">Bloqueado — Necesitas 10 reportes</div></div></div>
+  <div class="div"></div>
+  <div class="fg"><label>Nombre completo</label><input type="text" value="Janier Agualimpia Murillo"></div>
+  <div class="fg"><label>Correo</label><input type="email" value="janier@email.com"></div>
+  <div class="fg"><label>Teléfono</label><input type="tel" placeholder="+57 300 000 0000"></div>
+  <button class="btn" onclick="showToast('✓ Perfil actualizado')">Guardar cambios</button>
+</div>
+
+</div><!-- end #app -->
+
+<nav>
+  <button class="nb active" id="nav-mapa" onclick="goTo('mapa')">
+    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.5 3l-.16.03L15 5.1 9 3 3.36 4.9c-.21.07-.36.25-.36.48V20.5c0 .28.22.5.5.5l.16-.03L9 18.9l6 2.1 5.64-1.9c.21-.07.36-.25.36-.48V3.5c0-.28-.22-.5-.5-.5zM15 19l-6-2.11V5l6 2.11V19z"/></svg>
+    Mapa
+  </button>
+  <button class="nb" id="nav-reportar" onclick="goTo('reportar')">
+    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm5 11h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"/></svg>
+    Reportar
+  </button>
+  <button class="nb" id="nav-mis" onclick="goTo('mis')">
+    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>
+    Mis reportes
+  </button>
+  <button class="nb" id="nav-stats" onclick="goTo('stats')">
+    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/></svg>
+    Stats
+  </button>
+  <button class="nb" id="nav-perfil" onclick="goTo('perfil')">
+    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+    Perfil
+  </button>
+</nav>
+
+<script>
+// Ocultar splash cuando las fuentes carguen, máximo 900ms
+(function(){
+  const hide=()=>{const s=document.getElementById('splash');if(!s)return;s.style.opacity='0';setTimeout(()=>s.style.display='none',500);};
+  if(document.fonts){document.fonts.ready.then(hide);}
+  setTimeout(hide,900);
+})();
+function goTo(p){
+  document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));
+  document.querySelectorAll('.nb').forEach(x=>x.classList.remove('active'));
+  document.getElementById('page-'+p).classList.add('active');
+  document.getElementById('nav-'+p).classList.add('active');
+  document.getElementById('app').scrollTop=0;
+}
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2400);
+}
+let gpsOk=false;
+function getGPS(){
+  const txt=document.getElementById('gps-text');
+  const coords=document.getElementById('gps-coords');
+  txt.textContent='Obteniendo...';
+  if(navigator.geolocation){
+    navigator.geolocation.getCurrentPosition(p=>{
+      txt.textContent='Ubicación obtenida ✓';
+      coords.textContent=`${p.coords.latitude.toFixed(5)}, ${p.coords.longitude.toFixed(5)}`;
+      gpsOk=true; showToast('📍 GPS activado');
+    },()=>{
+      txt.textContent='GPS simulado ✓';
+      coords.textContent='4.43889, -75.23222';
+      gpsOk=true; showToast('📍 Ubicación simulada (DEMO)');
+    });
+  } else {
+    txt.textContent='GPS simulado ✓';
+    coords.textContent='4.43889, -75.23222';
+    gpsOk=true;
+  }
+}
+let photos=[];
+function handlePhotos(input){
+  const files=Array.from(input.files);
+  if(photos.length+files.length>4){showToast('Máx. 4 fotos');return;}
+  files.forEach(f=>{
+    const r=new FileReader();
+    r.onload=e=>{photos.push(e.target.result);renderPreviews();};
+    r.readAsDataURL(f);
+  });
+}
+function renderPreviews(){
+  document.getElementById('pg').innerHTML=photos.map((s,i)=>`
+    <div class="pt2"><img src="${s}"><button class="rp" onclick="removePhoto(${i})">✕</button></div>`).join('');
+}
+function removePhoto(i){photos.splice(i,1);renderPreviews();}
+function submitReport(){
+  const zona=document.getElementById('zona').value;
+  const nivel=document.getElementById('nivel').value;
+  const desc=document.getElementById('descripcion').value;
+  const dir=document.getElementById('direccion').value;
+  const tv=document.getElementById('tipo-via').value;
+  const coords=document.getElementById('gps-coords').textContent;
+  if(!zona){showToast('⚠️ Selecciona una zona');return;}
+  if(!nivel){showToast('⚠️ Selecciona el nivel');return;}
+  if(!desc.trim()){showToast('⚠️ Agrega descripción');return;}
+  const now=new Date();
+  const ds=now.toLocaleDateString('es-CO',{day:'numeric',month:'short',year:'numeric'});
+  const nl={alta:'Alta',media:'Media',baja:'Baja'}[nivel];
+  const nc={alta:'#ff4d4d',media:'#ffb347',baja:'#7cfc00'}[nivel];
+  const titulo=dir.trim()||`${zona} — Nuevo reporte`;
+  const card=document.createElement('div');
+  card.className='card report-item'; card.dataset.estado='pendiente';
+  card.innerHTML=`<div class="bi">
+    <div class="bic ${nivel}"><svg width="18" height="18" viewBox="0 0 24 24" fill="${nc}"><path d="M1 21L12 2 23 21H1zm11-3h2v-2h-2v2zm0-4h2v-4h-2v4z"/></svg></div>
+    <div class="bif">
+      <div class="bt">${titulo}</div>
+      <div class="bm">📅 ${ds} · ${zona}${tv?' · '+tv:''}</div>
+      ${coords?`<div class="bm">📡 ${coords}</div>`:''}
+      <div class="ba"><span class="bs pendiente">Pendiente</span><span class="bp ${nivel}">${nl}</span></div>
+      <div style="margin-top:7px;font-size:.76rem;color:var(--text-dim)">${desc}</div>
+    </div></div>`;
+  const list=document.getElementById('mis-list');
+  list.insertBefore(card,list.firstChild);
+  const total=list.querySelectorAll('.report-item').length;
+  const res=list.querySelectorAll('.report-item[data-estado="resuelto"]').length;
+  document.getElementById('mis-total').textContent=total;
+  document.getElementById('mis-res').textContent=res;
+  const st=document.getElementById('stat-total');
+  st.textContent=parseInt(st.textContent)+1;
+  document.getElementById('sov').classList.add('show');
+  document.getElementById('zona').value='';
+  document.getElementById('nivel').value='';
+  document.getElementById('descripcion').value='';
+  document.getElementById('direccion').value='';
+  document.getElementById('tipo-via').value='';
+  document.getElementById('gps-text').textContent='Obtener mi ubicación actual';
+  document.getElementById('gps-coords').textContent='';
+  gpsOk=false; photos=[]; renderPreviews();
+}
+function closeSuccess(){
+  document.getElementById('sov').classList.remove('show');
+  goTo('mis');
+}
+function upvote(btn){
+  if(btn.classList.contains('active'))return;
+  btn.classList.add('active');
+  const s=btn.querySelector('span');
+  s.textContent=parseInt(s.textContent)+1;
+  showToast('👍 Apoyo registrado');
+}
+function filterR(chip,estado){
+  document.querySelectorAll('.fc').forEach(c=>c.classList.remove('active'));
+  chip.classList.add('active');
+  document.querySelectorAll('.report-item').forEach(item=>{
+    item.style.display=(estado==='todos'||item.dataset.estado===estado)?'':'none';
+  });
+}
+</script>
+</body>
+</html>
